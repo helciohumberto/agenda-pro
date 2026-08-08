@@ -38,7 +38,7 @@ model Staff {
   name         String
   email        String @unique
   role         String?
-  passwordHash String
+  passwordHash String?
 
   tenant       Tenant        @relation(fields: [tenantId], references: [id])
   appointments Appointment[]

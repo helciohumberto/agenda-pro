@@ -2,11 +2,13 @@ import 'dotenv/config';
 import Fastify from 'fastify';
 import { authRoutes } from './auth/routes';
 import { appointmentRoutes } from './appointments/routes';
+import { serviceRoutes } from './services/routes'
 
 const app = Fastify({ logger: true });
 
 app.register(authRoutes);
 app.register(appointmentRoutes);
+app.register(serviceRoutes);
 
 app.listen({ port: 3000 }, (err) => {
   if (err) {
