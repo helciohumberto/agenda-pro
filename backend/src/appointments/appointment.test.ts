@@ -32,7 +32,6 @@ describe('criação de agendamento', () => {
       clientId, staffId, serviceId,
       scheduledAt: new Date('2026-09-01T14:00:00'),
     });
-
     expect(appointment.status).toBe('confirmed');
   });
 
@@ -51,20 +50,20 @@ describe('criação de agendamento', () => {
   });
 
   it('permite dois agendamentos no mesmo horário com staff diferente', async () => {
-  const outroStaff = await prisma.staff.create({
-    data: { tenantId, name: 'Outro Staff', email: `outro-staff-${randomUUID()}@teste.com`, role: 'Cabeleireiro' },
-  });
+    const outroStaff = await prisma.staff.create({
+      data: { tenantId, name: 'Outro Staff', email: `outro-staff-${randomUUID()}@teste.com`, role: 'Cabeleireiro' },
+    });
 
-  await createAppointment(tenantId, {
-    clientId, staffId, serviceId,
-    scheduledAt: new Date('2026-09-01T16:00:00'),
-  });
+    await createAppointment(tenantId, {
+      clientId, staffId, serviceId,
+      scheduledAt: new Date('2026-09-01T16:00:00'),
+    });
 
-  const segundo = await createAppointment(tenantId, {
-    clientId, staffId: outroStaff.id, serviceId,
-    scheduledAt: new Date('2026-09-01T16:00:00'),
-  });
+    const segundo = await createAppointment(tenantId, {
+      clientId, staffId: outroStaff.id, serviceId,
+      scheduledAt: new Date('2026-09-01T16:00:00'),
+    });
 
-  expect(segundo.status).toBe('confirmed');
-});
+    expect(segundo.status).toBe('confirmed');
+  });
 });

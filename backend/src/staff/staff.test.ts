@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeAll } from 'vitest';
+import { randomUUID } from 'crypto';
 import { prisma } from '../prisma';
 import { inviteStaff, acceptInvite } from './staff-repository';
 
@@ -11,14 +12,22 @@ describe('convite de funcionário', () => {
   });
 
   it('cria staff convidado sem senha definida', async () => {
-    const staff = await inviteStaff(tenantId, { name: 'João', email: 'joao-tdd@teste.com', role: 'Cabeleireiro' });
+    const staff = await inviteStaff(tenantId, {
+      name: 'João',
+      email: `joao-tdd-${randomUUID()}@teste.com`,
+      role: 'Cabeleireiro',
+    });
 
     expect(staff.name).toBe('João');
     expect(staff.passwordHash).toBeNull();
   });
 
   it('funcionário aceita convite e define senha', async () => {
-    const staff = await inviteStaff(tenantId, { name: 'Maria', email: 'maria-tdd@teste.com', role: 'Cabeleireira' });
+    const staff = await inviteStaff(tenantId, {
+      name: 'Maria',
+      email: `maria-tdd-${randomUUID()}@teste.com`,
+      role: 'Cabeleireira',
+    });
 
     const updated = await acceptInvite(staff.id, 'senhaNova123');
 
