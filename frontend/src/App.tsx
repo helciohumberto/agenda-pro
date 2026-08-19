@@ -1,7 +1,8 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Register } from './pages/Register';
-import { Dashboard } from './pages/Dashboard';
-import { ProtectedRoute } from './components/ProtectedRoute';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Register } from "./pages/Register";
+import { Dashboard } from "./pages/Dashboard";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { Book } from "./pages/Book";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           }
         />
         <Route path="/" element={<Navigate to="/register" />} />
+        <Route path="/book/:tenantId" element={<Book />} />
       </Routes>
     </BrowserRouter>
   );

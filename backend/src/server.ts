@@ -5,6 +5,8 @@ import { staffRoutes } from './staff/routes';
 import { serviceRoutes } from './services/routes';
 import { appointmentRoutes } from './appointments/routes';
 import cors from '@fastify/cors';
+import { publicRoutes } from './public/routes';
+
 
 export function buildApp() {
   const app = Fastify({ logger: false });
@@ -12,11 +14,12 @@ export function buildApp() {
   app.register(cors, {
     origin: 'http://localhost:5173',
   });
-
+  
   app.register(authRoutes);
   app.register(staffRoutes);
   app.register(serviceRoutes);
   app.register(appointmentRoutes);
+  app.register(publicRoutes);
   return app;
 }
 
