@@ -2,6 +2,8 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { requireAuth } from '../auth/middleware';
 import { createService } from './service-repository';
+import { prisma } from '../prisma';
+
 
 const createServiceSchema = z.object({
   name: z.string().min(2),
@@ -20,4 +22,10 @@ export async function serviceRoutes(app: FastifyInstance) {
     const service = await createService(tenantId, parsed.data);
     return reply.status(201).send(service);
   });
+
+  app.get('/services', { preHandler: requireAuth }, async (request, reply) => {
+  const { tenantId } = request.auth!;
+  const services = await prisma.service.findMany({ where: { tenantId } });
+  return reply.send(services);
+});
 }
