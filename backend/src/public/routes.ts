@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { prisma } from '../prisma';
 import { findOrCreateClient } from './client-repository';
 import { createAppointment } from '../appointments/appointment-repository';
+import { sendAppointmentConfirmation } from '../notifications/email-service';
+
 
 const bookSchema = z.object({
   clientName: z.string().min(2),
@@ -45,6 +47,16 @@ export async function publicRoutes(app: FastifyInstance) {
         serviceId,
         scheduledAt: new Date(scheduledAt),
       });
+
+      const service = await prisma.service.findUnique({ where: { id: serviceId } });
+
+      sendAppointmentConfirmation({
+        clientContact,
+        clientName,
+        serviceName: service!.name,
+        scheduledAt: new Date(scheduledAt),
+      }); // sem await de proposito -- nao trava a resposta esperando o email
+
       return reply.status(201).send(appointment);
     } catch (error) {
       if (error instanceof Error && error.message === 'SLOT_UNAVAILABLE') {
