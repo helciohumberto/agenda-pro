@@ -16,3 +16,4 @@
 | Sistema deixa marcar dois clientes no mesmo horário por engano | Cliente chega e não tem quem atenda | Testar essa regra primeiro, antes de qualquer outra coisa |
 | Prazo de 30 dias não ser suficiente | Projeto fica incompleto | Cortar coisas como "remarcar" ou "SMS" antes de cortar qualidade |
 | Perder tempo aprendendo ferramenta nova no meio do projeto | Atraso desnecessário | Usar só o que já domina (Node, React, PostgreSQL) |
+| Vulnerabilidade high em deepmerge-ts (via @prisma/config) | Stack exhaustion — mas só explorável via CLI local, não exposta a usuário externo | Risco aceito conscientemente; fix exigiria downgrade do Prisma 7→6, revertendo toda a migração de driver adapter. Reavaliar quando Prisma lançar patch compatível com v7 |
