@@ -29,6 +29,7 @@ model Business {
 
   tenant Tenant @relation(fields: [tenantId], references: [id])
 
+  @@index([tenantId]) 
   @@map("businesses")
 }
 
@@ -43,6 +44,7 @@ model Staff {
   tenant       Tenant        @relation(fields: [tenantId], references: [id])
   appointments Appointment[]
 
+  @@index([tenantId]) 
   @@map("staff")
 }
 
@@ -56,6 +58,7 @@ model Service {
   tenant       Tenant        @relation(fields: [tenantId], references: [id])
   appointments Appointment[]
 
+  @@index([tenantId]) 
   @@map("services")
 }
 
@@ -68,6 +71,7 @@ model Client {
   tenant       Tenant        @relation(fields: [tenantId], references: [id])
   appointments Appointment[]
 
+  @@index([tenantId]) 
   @@map("clients")
 }
 
@@ -86,5 +90,6 @@ model Appointment {
   service Service @relation(fields: [serviceId], references: [id])
 
   @@unique([staffId, scheduledAt], name: "unique_staff_slot")
+  @@index([tenantId]) 
   @@map("appointments")
 }

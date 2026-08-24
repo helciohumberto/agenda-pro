@@ -14,9 +14,28 @@ const createAppointmentSchema = z.object({
 export async function appointmentRoutes(app: FastifyInstance) {
   app.get('/appointments', { preHandler: requireAuth }, async (request, reply) => {
     const { tenantId, role, staffId } = request.auth!;
+    const { page = '1', limit = '20' } = request.query as { page?: string; limit?: string };
+
     const where = role === 'owner' ? { tenantId } : { tenantId, staffId };
-    const appointments = await prisma.appointment.findMany({ where });
-    return reply.send(appointments);
+    const take = Number(limit);
+    const skip = (Number(page) - 1) * take;
+
+    const [appointments, total] = await Promise.all([
+      prisma.appointment.findMany({
+        where,
+        take,
+        skip,
+        orderBy: { scheduledAt: 'desc' },
+        include: {
+          client: { select: { name: true, contact: true } },
+          service: { select: { name: true, price: true } },
+          staff: { select: { name: true } },
+        },
+      }),
+      prisma.appointment.count({ where }),
+    ]);
+
+    return reply.send({ data: appointments, total, page: Number(page), limit: take });
   });
 
   app.post('/appointments', { preHandler: requireAuth }, async (request, reply) => {
