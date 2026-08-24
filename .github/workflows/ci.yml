@@ -12,5 +12,6 @@ jobs:
         with:
           node-version: 20
       - run: npm install
+      - run: npx prisma generate
       - run: npm run lint --if-present
       - run: npm run test --if-present
