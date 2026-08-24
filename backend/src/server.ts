@@ -8,6 +8,7 @@ import { staffRoutes } from "./staff/routes";
 import { serviceRoutes } from "./services/routes";
 import { appointmentRoutes } from "./appointments/routes";
 import { publicRoutes } from "./public/routes";
+import { healthRoutes } from './health/routes';
 
 export function buildApp() {
   const app = Fastify({
@@ -36,6 +37,8 @@ export function buildApp() {
   app.register(serviceRoutes);
   app.register(appointmentRoutes);
   app.register(publicRoutes);
+  app.register(healthRoutes);
+
 
   app.setErrorHandler((error, request, reply) => {
     request.log.error(error);
