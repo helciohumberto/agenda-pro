@@ -48,6 +48,8 @@ export async function publicRoutes(app: FastifyInstance) {
         scheduledAt: new Date(scheduledAt),
       });
 
+      request.log.info({ tenantId, appointmentId: appointment.id }, 'Agendamento criado');
+
       const service = await prisma.service.findUnique({ where: { id: serviceId } });
 
       sendAppointmentConfirmation({
