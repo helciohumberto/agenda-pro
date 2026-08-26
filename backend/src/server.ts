@@ -8,7 +8,7 @@ import { staffRoutes } from "./staff/routes";
 import { serviceRoutes } from "./services/routes";
 import { appointmentRoutes } from "./appointments/routes";
 import { publicRoutes } from "./public/routes";
-import { healthRoutes } from './health/routes';
+import { healthRoutes } from "./health/routes";
 
 export function buildApp() {
   const app = Fastify({
@@ -29,7 +29,9 @@ export function buildApp() {
   app.register(helmet);
 
   app.register(cors, {
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", process.env.FRONTEND_URL || ""].filter(
+      Boolean,
+    ),
   });
 
   app.register(authRoutes);
@@ -38,7 +40,6 @@ export function buildApp() {
   app.register(appointmentRoutes);
   app.register(publicRoutes);
   app.register(healthRoutes);
-
 
   app.setErrorHandler((error, request, reply) => {
     request.log.error(error);
@@ -62,7 +63,7 @@ if (require.main === module) {
   const app = buildApp();
   const port = Number(process.env.PORT) || 3000;
 
-  app.listen({ port, host: '0.0.0.0' }, (err) => {
+  app.listen({ port, host: "0.0.0.0" }, (err) => {
     if (err) {
       app.log.error(err);
       process.exit(1);
