@@ -29,9 +29,23 @@ export function buildApp() {
   app.register(helmet);
 
   app.register(cors, {
-    origin: ["http://localhost:5173", process.env.FRONTEND_URL || ""].filter(
-      Boolean,
-    ),
+    origin: (origin, callback) => {
+      const allowed = [
+        "http://localhost:5173",
+        /^https:\/\/agenda-pro.*\.vercel\.app$/,
+      ];
+
+      if (
+        !origin ||
+        allowed.some((rule) =>
+          typeof rule === "string" ? rule === origin : rule.test(origin),
+        )
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"), false);
+      }
+    },
   });
 
   app.register(authRoutes);
