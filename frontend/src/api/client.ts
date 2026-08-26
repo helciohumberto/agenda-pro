@@ -20,3 +20,15 @@ export async function apiRequest(path: string, options: RequestInit = {}) {
 
   return data;
 }
+
+export function getTokenPayload(): { tenantId: string; staffId: string; role: string } | null {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload));
+  } catch {
+    return null;
+  }
+}
