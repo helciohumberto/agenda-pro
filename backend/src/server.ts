@@ -60,7 +60,9 @@ export function buildApp() {
 
 if (require.main === module) {
   const app = buildApp();
-  app.listen({ port: 3000 }, (err) => {
+  const port = Number(process.env.PORT) || 3000;
+
+  app.listen({ port, host: '0.0.0.0' }, (err) => {
     if (err) {
       app.log.error(err);
       process.exit(1);
